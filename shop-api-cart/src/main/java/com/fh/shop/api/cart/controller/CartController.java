@@ -36,6 +36,7 @@ public class CartController extends BaseController {
     })
     @ApiOperation("添加商品到购物车")
     public ServerResponse addCart(Long skuId, Long count){
+        System.out.println("Git测试");
         MemberVo memberVo = findMemberVo(request);
         Long id = memberVo.getId();
         return cartService.addCart(id,skuId,count);
