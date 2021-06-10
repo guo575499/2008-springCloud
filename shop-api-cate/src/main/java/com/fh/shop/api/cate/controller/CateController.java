@@ -27,6 +27,7 @@ public class CateController {
     @ResponseBody
     @ApiOperation("查询分类")
     public ServerResponse findCate(){
+        System.out.println("Git测试");
         log.info("端口号:{}",port);
         return  cateService.findCate();
     }
