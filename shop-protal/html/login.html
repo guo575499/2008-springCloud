@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <link rel="stylesheet" href="../js/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" href="../js/shop/assets/img/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../js/shop/css/webbase.css" />
+    <link rel="stylesheet" type="text/css" href="../js/shop/css/pages-JD-index.css" />
+    <link rel="stylesheet" type="text/css" href="../js/shop/css/widget-jquery.autocomplete.css" />
+    <link rel="stylesheet" type="text/css" href="../js/shop/css/widget-cartPanelView.css" />
+
+    <title>登录页面</title>
+</head>
+<body>
+
+
+
+<!--列表-->
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">会员登录</h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" id="serach_from">
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label">会员名:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="memberName"  placeholder="请输入会员名">
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label">密码:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="password" placeholder="请输入密码" autocomplete="off">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-success" onclick="login()">登录</button>
+    <button type="button" class="btn btn-success" onclick="getPassword()">忘记密码</button>
+</div>
+
+
+
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/shop/js/pages/index.js"></script>
+
+<script type="text/javascript" src="../js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script>
+
+
+
+
+    function login(){
+        var v_param={};
+        v_param.memberName=$("#memberName").val();
+        v_param.password=$("#password").val();
+        if(v_param.memberName=="" || v_param.password==""
+        ){
+            alert("会员信息不能为空");
+            return false;
+        }
+        $.ajax({
+            type:"post",
+            url:"http://localhost:9000/member"+"/api/member/login",
+            data:{"memberName":v_param.memberName,"password":v_param.password},
+            success:function (res) {
+                if(res.code==200){
+                location.href="index.html";
+                var  data =res.data;
+                    $.cookie('fh-xjs', data);
+                }else if(res.code==6008){
+
+                    var v_param={};
+                    v_param.email=res.data.email;
+                    v_param.id= res.data.id;
+                    //因为cookie中只能放入string类型的值所以我们需要将js对象转换为json格式的字符串
+                    $.cookie("param",JSON.stringify(v_param));
+                    location.href="active.html";
+                }
+            }
+        })
+    }
+
+    function getPassword() {
+        location.href="email.html";
+    }
+
+
+</script>
+</body>
+</html>

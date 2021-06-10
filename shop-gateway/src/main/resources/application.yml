@@ -1,0 +1,24 @@
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka/,http://localhost:7001/eureka/
+spring:
+  application:
+    name: shop-Gateway
+server:
+  port: 9000
+zuul:
+  routes:
+    shop-cate-api: #使用网关的名字
+      path: /cate/**
+    shop-goods-api:
+      path: /goods/**
+    shop-member-api:
+      path: /member/**
+    shop-cart-api:
+      path: /cart/**
+fh:
+  shop:
+    checkUrls: /api/member/getMemVo,/api/member/loginOut,/api/carts/addCart,/api/carts/findCart

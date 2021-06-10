@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <link rel="stylesheet" href="../js/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" href="../js/shop/assets/img/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../js/shop/css/webbase.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/shop/css/pages-JD-index.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/shop/css/widget-jquery.autocomplete.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/shop/css/widget-cartPanelView.css"/>
+
+    <title>发送邮箱找回密码</title>
+</head>
+<body>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">邮箱找回密码</h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" id="serach_from">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">邮箱:</label>
+                            <div class="col-sm-5">
+
+                                <input type="text" class="form-control" id="email" placeholder="请输入邮箱"
+                                       onblur="checkEmail(this.value)">
+
+                                <div id="emailTip">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">验证码:</label>
+                            <div class="col-sm-2">
+                                <input class="form-control" placeholder="验证码" id="code" autocomplete="off"
+                                       autocomplete="off">
+                            </div>
+
+                            <span id="imageCodeDiv">
+
+                            </span>
+                            <span>
+                               <button type="button" class="btn btn-link" onclick="initCode();">看不清楚，换一张</button>
+                             </span>
+                        </div>
+                        <button type="button" class="btn btn-success" id="next" onclick="checkCode();"></span>下一步
+                        </button>
+                    </form>
+                    <div id="xjs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../js/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/shop/js/pages/index.js"></script>
+
+<script type="text/javascript" src="../js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script>
+
+
+    $(function () {
+        initCode();
+    })
+
+
+    function initCode() {
+        var keyId=$.cookie("id");
+        $.ajax({
+            url:url+"/code",
+            data:{"id":keyId},
+            type:"get",
+            success: function (res) {
+                if (res.code == 200) {
+                    var v_imageByte = res.data.imageByte;
+                    console.log(v_imageByte);
+                    var v_id=res.data.id;
+                    $("#imageCodeDiv").html('<img src="data:image/jpg;base64,'+v_imageByte+'"/>');
+                    $.cookie("id",v_id);
+                }
+            }
+        })
+    }
+
+
+    function checkCode() {
+        var email = $("#email").val();
+        var code = $("#code").val();
+        var v_id=$.cookie("id");
+        $.ajax({
+            type: "post",
+            url: "" + url + "/member/checkCode",
+            data: {"code": code, "email": email,"id":v_id},
+            success: function (res) {
+                if (res.code == 200) {
+                    location.href = "login.html";
+                } else {
+                    alert(res.message);
+                }
+             }
+        })
+    }
+
+
+
+
+
+    var v_error = {};
+    function checkEmail() {
+        var email = $("#email").val();
+        $.ajax({
+            type: "post",
+            url: "" + url + "/member/checkEmail",
+            data: {"email": email},
+            success: function (res) {
+
+                if (res.code == 200) {
+                    $("#emailTip").html("<span style='color:red'>邮箱不存在</span>");
+                    // $("#button").removeAttr("disabled");
+                    delete v_error["email"];
+                } else if (res.code == 6013) {
+
+                    $("#emailTip").html("<span style='color:red'>邮箱为空</span>");
+                    // $("#button").removeAttr("disabled");
+                    delete v_error["email"];
+
+                } else if (res.code == 6014) {
+                    $("#emailTip").html("<span style='color: #1ba157'>可以使用</span>");
+                    // $("#button").attr("disabled","disabled");
+                    v_error["email"] = res.message;
+                }
+                vilidtor();
+            }
+        })
+    }
+
+    function vilidtor() {
+        var v_res = [];
+        for (let x in v_error) {
+            v_res.push(v_error[x]);
+        }
+        if (v_res.length > 0) {
+            var v_html = [];
+            for (let x of v_res) {
+                v_html += '<li class="list-group-item list-group-item-danger">' + x + '</li>';
+            }
+            $("#errorRed").html(v_html);
+            $("#button").attr("disabled", "disabled");
+        } else {
+            $("#button").removeAttr("disabled");
+            $("#errorRed").html("");
+        }
+    }
+
+
+</script>
+</body>
+</html>

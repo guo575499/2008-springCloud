@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+</head>
+<body>
+
+<h1 style="color: red">还没有激活请点击发送激活邮件<button style="color: #1ba157;size: A3" onclick="activeMember()">发送</button></h1>
+<h1 style="color: red">还没有激活请点击发送激活邮件<button style="color: #1ba157;size: A3" onclick="activeMember2()">发送</button></h1>
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../js/shop/js/pages/index.js"></script>
+<script type="text/javascript" src="../js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script>
+
+    function activeMember() {
+        //用户点击激活的时候
+       var v_param= $.cookie("param");
+
+         console.log(v_param);
+        $.ajax({
+            type:"post",
+            data:v_param,
+            url:url+"//member/sendMail",
+            contentType:"application/json",
+            success:function (res) {
+                if(res.code==200){
+                    location.href="mailSuccess.html";
+                }
+            }
+        })
+    }
+
+    function activeMember2() {
+        //用户点击激活的时候
+        var v_param= $.cookie("param");
+        console.log(v_param);
+        var eval1 = eval('('+v_param+')');
+        $.ajax({
+            type:"post",
+            data:v_param,
+            url:url+"//member/sendMail",
+            contentType:"application/json",
+            success:function (res) {
+                if(res.code==200){
+                    location.href="mailSuccess.html";
+                }
+            }
+        })
+
+    }
+
+
+
+</script>
+
+</body>
+</html>

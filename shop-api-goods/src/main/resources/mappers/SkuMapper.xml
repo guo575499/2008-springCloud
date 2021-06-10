@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+    "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fh.shop.api.goods.mapper.ISkuMapper">
+
+    <select id="findStatusList" resultType="com.fh.shop.po.goods.Sku">
+    select sku.id,sku.image,sku.skuName,sku.price from t_sku sku
+    LEFT JOIN t_spu spu on sku.spuId=spu.id
+    where spu.status=1 and spu.newOld=1 and spu.hot=1
+</select>
+
+    <!--<select id="selectSkuStock" resultType="com.fh.shop.vo.SkuEmailVo">-->
+        <!--select sku.price,sku.stock,sku.skuName,spu.cateName,spu.brandName-->
+        <!--from t_sku sku left  join  t_spu spu on-->
+        <!--sku.spuId=spu.id where sku.stock &lt; 10-->
+    <!--</select>-->
+
+    <!--<update id="updateStock" parameterType="com.fh.shop.vo.CartSkuVo">-->
+        <!--update t_sku set stock = stock-#{count} where id=#{skuId} and stock >= #{count}-->
+    <!--</update>-->
+
+    <!--<update id="updateSkuStock">-->
+                <!--update t_sku set stock=stock+#{count} where id=#{skuId}-->
+    <!--</update>-->
+
+    <!--<update id="updateSales">-->
+         <!--update t_sku set sales=sales+#{skuCount} where id=#{skuId}-->
+    <!--</update>-->
+
+
+</mapper>

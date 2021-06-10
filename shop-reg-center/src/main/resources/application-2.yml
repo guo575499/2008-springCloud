@@ -1,0 +1,12 @@
+#端口为7001的一个服务中心
+server:
+  port: 7001
+eureka:
+  instance:
+    hostname: localhost      #服务器域名
+  client:
+    register-with-eureka: false #服务注册 false 自己不注册到服务中心
+    fetchRegistry: false   #服务发现  表示自己端就是注册中心 我的职责就是维护服务实例 false  自己不获取注册信息
+    service-url:    #集群的情况下，服务端之间要互相注册，指向对方
+      defaultZone: http://localhost:7001/eureka/
+#http://Eureka6001.com:6001/eureka/指向另外一个端口为6001的服务中心
